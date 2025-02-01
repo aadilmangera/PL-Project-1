@@ -8,11 +8,21 @@ fun main(){
     val binList = mutableListOf<MutableList<Int>>()
     val binCapacity = 20
     val itemList:List<Int> = generateRandomIntList(10000,1..binCapacity)
+    val runtime = Runtime.getRuntime()
+
+    println("Before task:")
+    printMemoryUsage(runtime)
 
     val startTime=System.currentTimeMillis()
+
     bestFit(binList,itemList,binCapacity)
+
     val endTime=System.currentTimeMillis()
 
+    println("\nAfter task:")
+    printMemoryUsage(runtime)
+
+    println("\n")
     binList.forEach{
         print("(")
         it.forEach{ v -> print("$v ") }
@@ -60,4 +70,14 @@ fun getTargetBin(binList:MutableList<MutableList<Int>>, item: Int, binCapacity:I
 
 fun generateRandomIntList(size: Int, range: IntRange): List<Int> {
     return List(size) { Random.nextInt(range.first, range.last + 1) }
+}
+
+fun printMemoryUsage(runtime: Runtime) {
+    val totalMemory = runtime.totalMemory() / 1024 / 1024  // in MB
+    val freeMemory = runtime.freeMemory() / 1024 / 1024    // in MB
+    val usedMemory = totalMemory - freeMemory
+
+    println("Total Memory (MB): $totalMemory")
+    println("Free Memory (MB): $freeMemory")
+    println("Used Memory (MB): $usedMemory")
 }
