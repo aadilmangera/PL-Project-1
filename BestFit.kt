@@ -22,7 +22,7 @@ fun main(){
     println("\nAfter task:")
     printMemoryUsage(runtime)
 
-    println("\n")
+    println()
     binList.forEach{
         print("(")
         it.forEach{ v -> print("$v ") }
