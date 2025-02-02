@@ -7,11 +7,11 @@ import kotlin.random.Random
 fun main(){
     val binList = mutableListOf<MutableList<Int>>()
     val binCapacity = 20
-    val itemList:List<Int> = generateRandomIntList(10000,1..binCapacity)
+    val itemList:List<Int> = genRandomInts(20000,1..binCapacity)
     val runtime = Runtime.getRuntime()
 
     println("Before task:")
-    printMemoryUsage(runtime)
+    printMemoryInfo(runtime)
 
     val startTime=System.currentTimeMillis()
 
@@ -20,7 +20,7 @@ fun main(){
     val endTime=System.currentTimeMillis()
 
     println("\nAfter task:")
-    printMemoryUsage(runtime)
+    printMemoryInfo(runtime)
 
     println()
     binList.forEach{
@@ -32,13 +32,21 @@ fun main(){
     println("Total time of cost: "+ (endTime - startTime) + "ms")
 }
 
+/*
+Function logic:
+1) Add the first item to a new bin directly;
+2) From the second item to the last one:
+   a. Search the list of bins to find the one whose load is maximum and the remaining capacity is enough for the current item;
+   b. If a such bin exists, put the current item into it; otherwise, put the current item into a new bin;
+   C. Repeat step a and b until there is no item left.
+ */
 fun bestFit(binList:MutableList<MutableList<Int>>, itemList: List<Int>, binCapacity:Int){
     itemList.forEach {
         if (it > binCapacity){
             println("Error! The size of item, $it, is greater then bin's capacity: $binCapacity")
             return
         }
-        if(binList.size == 0){
+        if(binList.isEmpty()){
             binList.add(mutableListOf(it))
         }else{
             val idx=getTargetBin(binList,it,binCapacity)
@@ -68,16 +76,16 @@ fun getTargetBin(binList:MutableList<MutableList<Int>>, item: Int, binCapacity:I
     return res
 }
 
-fun generateRandomIntList(size: Int, range: IntRange): List<Int> {
+fun genRandomInts(size: Int, range: IntRange): List<Int> {
     return List(size) { Random.nextInt(range.first, range.last + 1) }
 }
 
-fun printMemoryUsage(runtime: Runtime) {
-    val totalMemory = runtime.totalMemory() / 1024 / 1024  // in MB
-    val freeMemory = runtime.freeMemory() / 1024 / 1024    // in MB
-    val usedMemory = totalMemory - freeMemory
+fun printMemoryInfo(runtime: Runtime) {
+    val total = runtime.totalMemory() / 1024 / 1024
+    val free = runtime.freeMemory() / 1024 / 1024
+    val used = total - free
 
-    println("Total Memory (MB): $totalMemory")
-    println("Free Memory (MB): $freeMemory")
-    println("Used Memory (MB): $usedMemory")
+    println("Total Memory (MB): $total")
+    println("Free Memory (MB): $free")
+    println("Used Memory (MB): $used")
 }
